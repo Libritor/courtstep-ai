@@ -5,7 +5,14 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
-// Add page imports here
+import Layout from './components/Layout';
+import Landing from './pages/Landing';
+import Dashboard from './pages/Dashboard';
+import GaitAnalysis from './pages/GaitAnalysis';
+import RiskReport from './pages/RiskReport';
+import Rehabilitation from './pages/Rehabilitation';
+import SolanaProofs from './pages/SolanaProofs';
+import UploadData from './pages/UploadData';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -33,7 +40,15 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      {/* Add your page Route elements here */}
+      <Route element={<Layout />}>
+        <Route path="/" element={<Landing />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/gait-analysis" element={<GaitAnalysis />} />
+        <Route path="/risk-report" element={<RiskReport />} />
+        <Route path="/rehabilitation" element={<Rehabilitation />} />
+        <Route path="/solana-proofs" element={<SolanaProofs />} />
+        <Route path="/upload" element={<UploadData />} />
+      </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
