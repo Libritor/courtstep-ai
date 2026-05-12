@@ -23,7 +23,7 @@ const navSections = [
     title: "Product",
     items: [
       { path: "/", label: "Home", icon: Home },
-      { path: "/demo", label: "Live dApp Demo", icon: Zap, badge: "LIVE" },
+      { path: "/demo", label: "Demo Version", icon: Zap, badge: "DEMO" },
       { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
     ],
   },

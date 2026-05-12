@@ -108,14 +108,14 @@ export default function LiveDemo() {
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 mb-2">
             <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-            <span className="text-[10px] font-bold text-accent uppercase tracking-wider">Live dApp Demo</span>
+            <span className="text-[10px] font-bold text-accent uppercase tracking-wider">Demo Version</span>
           </div>
           <h1 className="text-2xl font-bold flex items-center gap-3">
             <Zap className="w-6 h-6 text-accent" />
-            CourtStep AI — End-to-End Flow
+            CourtStep AI — Demo Version Flow
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Connect wallet → upload sensor data → generate risk score → commit proof to Solana.
+            Try the full CourtStep workflow with safe sample data before using real uploads.
           </p>
         </div>
       </div>

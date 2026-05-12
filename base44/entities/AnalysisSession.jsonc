@@ -1,0 +1,66 @@
+{
+  "name": "AnalysisSession",
+  "type": "object",
+  "properties": {
+    "file_name": {
+      "type": "string",
+      "description": "Uploaded sensor data file name"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "Uploaded file URL"
+    },
+    "row_count": {
+      "type": "number",
+      "description": "Number of CSV data rows processed"
+    },
+    "risk_score": {
+      "type": "number",
+      "description": "Computed injury risk score from 0 to 100"
+    },
+    "symmetry": {
+      "type": "string",
+      "description": "Estimated gait symmetry percentage"
+    },
+    "peak_force": {
+      "type": "string",
+      "description": "Peak landing force detected"
+    },
+    "fatigue_onset": {
+      "type": "string",
+      "description": "Estimated fatigue onset time"
+    },
+    "proof_hash": {
+      "type": "string",
+      "description": "SHA-256 hash of the uploaded sensor file"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "uploaded",
+        "analyzed"
+      ],
+      "default": "uploaded",
+      "description": "Processing status"
+    },
+    "risk_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Risk findings generated from uploaded data"
+    }
+  },
+  "required": [
+    "file_name",
+    "status"
+  ]
+}
