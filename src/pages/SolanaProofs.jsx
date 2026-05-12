@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { solanaRecords } from "@/lib/mockData";
-import { Shield, Wallet, Link2, Award, FileCheck, UserCheck, Sparkles } from "lucide-react";
+import { solanaRecords, solanaProofDetails } from "@/lib/mockData";
+import { Shield, Wallet, Link2, Award, FileCheck, UserCheck, Sparkles, Copy, ExternalLink, XCircle, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import SolanaRecordRow from "@/components/solana/SolanaRecordRow";
@@ -9,11 +9,12 @@ export default function SolanaProofs() {
   const [walletConnected, setWalletConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
   const [minting, setMinting] = useState(null);
+  const [revoked, setRevoked] = useState(false);
   const { toast } = useToast();
 
   const handleConnect = () => {
     setWalletConnected(true);
-    setWalletAddress("8xR4mN7kP2vQ5tLw9jB3cF6gH1dS0aY4uE8iO7nK");
+    setWalletAddress(solanaProofDetails.walletAddress);
     toast({ title: "Wallet Connected", description: "Phantom wallet connected successfully." });
   };
 
@@ -21,38 +22,103 @@ export default function SolanaProofs() {
     setMinting(action);
     setTimeout(() => {
       setMinting(null);
-      toast({ title: "Transaction Complete", description: `${action} has been submitted to Solana.` });
+      toast({ title: "Transaction Complete", description: `${action} submitted to Solana.` });
     }, 2000);
   };
 
+  const copy = (text) => {
+    navigator.clipboard.writeText(text);
+    toast({ title: "Copied to clipboard" });
+  };
+
+  const handleRevoke = () => {
+    setRevoked(true);
+    toast({ title: "Access Revoked", description: "Revocation event committed to Solana." });
+  };
+
   const actions = [
-    { id: "mint", label: "Mint Recovery Milestone Proof", icon: Award, color: "bg-accent/15 text-accent hover:bg-accent/25" },
-    { id: "hash", label: "Store Gait Report Hash", icon: FileCheck, color: "bg-primary/15 text-primary hover:bg-primary/25" },
-    { id: "auth", label: "Authorize Team Doctor Access", icon: UserCheck, color: "bg-secondary/15 text-secondary hover:bg-secondary/25" },
-    { id: "training", label: "Generate Training Completion Record", icon: Sparkles, color: "bg-yellow-400/15 text-yellow-400 hover:bg-yellow-400/25" },
+    { id: "mint", label: "Mint Recovery Milestone Proof", icon: Award, color: "accent" },
+    { id: "hash", label: "Store Gait Report Hash", icon: FileCheck, color: "primary" },
+    { id: "auth", label: "Authorize Team Doctor Access", icon: UserCheck, color: "secondary" },
+    { id: "training", label: "Generate Training Completion Record", icon: Sparkles, color: "yellow" },
   ];
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold flex items-center gap-3">
-          <Shield className="w-6 h-6 text-yellow-400" />
+          <Shield className="w-6 h-6 text-accent" />
           Solana Proof Layer
         </h1>
-        <p className="text-sm text-muted-foreground mt-1">Privacy-preserving on-chain verification for athlete data</p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Privacy-preserving on-chain verification for athlete health events.
+        </p>
       </div>
 
-      {/* Explainer */}
+      {/* Principle banner */}
+      <div className="bg-gradient-to-br from-card via-card to-accent/5 border border-accent/30 rounded-2xl p-6">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-accent mt-0.5 shrink-0" />
+          <div>
+            <h2 className="text-base font-bold mb-1">Do not store raw health data on Solana.</h2>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              CourtStep AI stores only <strong className="text-foreground">hashes, consent metadata, and permission proofs</strong> on Solana.
+              Raw biomechanical and medical data remain encrypted offchain, under athlete control.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Featured proof card */}
+      <div className="bg-card border border-border rounded-2xl p-6">
+        <div className="flex items-center justify-between mb-5">
+          <div>
+            <p className="text-[10px] text-accent font-bold uppercase tracking-wider">Latest Committed Proof</p>
+            <h2 className="text-base font-bold mt-0.5">Marcus Johnson — Session 2026-05-10</h2>
+          </div>
+          <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-[10px] font-bold text-accent uppercase">
+            {revoked ? "Revoked" : "Active"}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm">
+          <ProofField label="Wallet Address" value={solanaProofDetails.walletAddress} mono onCopy={copy} />
+          <ProofField label="Session ID" value={solanaProofDetails.sessionId} mono onCopy={copy} />
+          <ProofField label="Data Hash (SHA-256)" value={solanaProofDetails.dataHash} mono onCopy={copy} />
+          <ProofField label="Model Version Hash" value={solanaProofDetails.modelHash} mono onCopy={copy} />
+          <ProofField label="Consent Scope" value={solanaProofDetails.consentScope} />
+          <ProofField label="Timestamp (UTC)" value={solanaProofDetails.timestamp} mono />
+          <ProofField label="Transaction Signature" value={solanaProofDetails.txSignature} mono onCopy={copy} />
+          <ProofField label="Network" value={solanaProofDetails.network} />
+        </div>
+
+        <div className="mt-5 flex flex-wrap gap-3 pt-5 border-t border-border">
+          <Button variant="outline" size="sm" className="gap-2" disabled>
+            <ExternalLink className="w-3.5 h-3.5" /> View on Explorer
+          </Button>
+          {!revoked ? (
+            <Button onClick={handleRevoke} variant="outline" size="sm" className="gap-2 text-destructive border-destructive/30 hover:bg-destructive/10">
+              <XCircle className="w-3.5 h-3.5" /> Revoke Access
+            </Button>
+          ) : (
+            <span className="px-3 py-1.5 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-semibold text-destructive">
+              Access revoked · permission record updated
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* How it works */}
       <div className="bg-card border border-border rounded-xl p-6">
         <div className="flex items-start gap-3">
           <Link2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
           <div>
             <h2 className="text-base font-semibold mb-2">How It Works</h2>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Raw medical and biomechanical data is <strong className="text-foreground">never stored on-chain</strong>. 
-              Solana only stores verifiable hashes, permission records, and recovery proofs. This ensures 
-              athletes maintain full control over their private health data while enabling transparent 
-              verification of rehabilitation milestones and team access consent.
+              Raw medical and biomechanical data is <strong className="text-foreground">never stored on-chain</strong>.
+              Solana only stores verifiable hashes, permission records, and recovery proofs. Athletes maintain full
+              control over their private health data while enabling transparent verification of rehabilitation
+              milestones and consent.
             </p>
           </div>
         </div>
@@ -88,9 +154,11 @@ export default function SolanaProofs() {
                 key={a.id}
                 onClick={() => handleAction(a.label)}
                 disabled={minting !== null}
-                className={`flex items-center gap-3 p-4 rounded-xl border border-border transition-all duration-200 ${a.color} ${minting === a.label ? "opacity-50" : ""}`}
+                className={`flex items-center gap-3 p-4 rounded-xl border border-${a.color}/20 bg-${a.color}/5 hover:bg-${a.color}/15 transition-all duration-200 ${
+                  minting === a.label ? "opacity-50" : ""
+                }`}
               >
-                <a.icon className="w-5 h-5 shrink-0" />
+                <a.icon className={`w-5 h-5 shrink-0 text-${a.color}`} />
                 <span className="text-sm font-medium text-left">
                   {minting === a.label ? "Processing..." : a.label}
                 </span>
@@ -124,6 +192,22 @@ export default function SolanaProofs() {
             </table>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function ProofField({ label, value, mono, onCopy }) {
+  return (
+    <div>
+      <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">{label}</p>
+      <div className="flex items-center gap-2">
+        <p className={`text-xs ${mono ? "font-mono" : ""} break-all flex-1`}>{value}</p>
+        {onCopy && (
+          <button onClick={() => onCopy(value)} className="text-muted-foreground hover:text-foreground shrink-0">
+            <Copy className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
     </div>
   );

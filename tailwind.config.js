@@ -2,6 +2,15 @@
 module.exports = {
     darkMode: ["class"],
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
+    safelist: [
+      // Dynamic color utilities used with runtime-built class names (e.g., `bg-${color}/10`)
+      { pattern: /^(bg|text|border|ring|from|to|via)-(primary|secondary|accent|destructive|yellow-400|yellow-500)(\/\d{1,3})?$/ },
+      { pattern: /^bg-(primary|secondary|accent|destructive|yellow-400|yellow-500)\/(5|10|15|20|25)$/ },
+      { pattern: /^border-(primary|secondary|accent|destructive|yellow-400|yellow-500)\/(20|30|40)$/ },
+      { pattern: /^text-(primary|secondary|accent|destructive|yellow-400|yellow-500)$/ },
+      { pattern: /^hover:bg-(primary|secondary|accent|destructive|yellow-400|yellow-500)\/(10|15|20|25)$/ },
+      { pattern: /^hover:border-(primary|secondary|accent|destructive|yellow-400|yellow-500)\/(20|30|40)$/ },
+    ],
   theme: {
   	extend: {
       fontFamily: {

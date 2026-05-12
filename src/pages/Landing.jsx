@@ -4,44 +4,53 @@ import {
   Activity,
   Shield,
   Brain,
-  HeartPulse,
-  Zap,
   ArrowRight,
-  ChevronRight,
   Footprints,
+  Zap,
+  Wallet,
+  Upload,
+  FileCheck,
+  Sparkles,
+  Lock,
+  TrendingUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { stackBadges } from "@/lib/mockData";
 
-const features = [
+const featureCards = [
   {
-    icon: Brain,
-    title: "Injury Prevention",
-    desc: "Detect abnormal foot-loading patterns and biomechanical risk indicators before injuries occur.",
+    icon: Footprints,
+    title: "Smart Insoles",
+    desc: "Pressure, gait, impact, and load symmetry captured by 256 high-density sensors per insole.",
     color: "text-primary",
     bg: "bg-primary/10",
+    border: "border-primary/20",
   },
   {
-    icon: Activity,
-    title: "Movement Correction",
-    desc: "Real-time gait analysis and AI-powered feedback to correct risky movement mechanics.",
+    icon: Brain,
+    title: "AI Risk Engine",
+    desc: "Injury risk, fatigue, landing instability, and recovery readiness scored in real time.",
     color: "text-secondary",
     bg: "bg-secondary/10",
-  },
-  {
-    icon: HeartPulse,
-    title: "Post-Surgery Rehab",
-    desc: "Guided rehabilitation protocols with progress tracking and adaptive exercise recommendations.",
-    color: "text-accent",
-    bg: "bg-accent/10",
+    border: "border-secondary/20",
   },
   {
     icon: Shield,
-    title: "Privacy-Preserving Proofs",
-    desc: "Solana stores only verifiable hashes and permission records. Raw medical data stays private.",
-    color: "text-yellow-400",
-    bg: "bg-yellow-400/10",
+    title: "Solana Proof Layer",
+    desc: "Encrypted health data offchain. Hashes, consent, and revocation proofs onchain.",
+    color: "text-accent",
+    bg: "bg-accent/10",
+    border: "border-accent/20",
   },
+];
+
+const ctas = [
+  { label: "Launch Demo", to: "/demo", icon: Zap, primary: true },
+  { label: "Connect Wallet", to: "/demo", icon: Wallet },
+  { label: "Upload Sensor Data", to: "/upload", icon: Upload },
+  { label: "Generate Risk Report", to: "/risk-report", icon: Brain },
+  { label: "Commit Proof to Solana", to: "/solana-proofs", icon: FileCheck },
 ];
 
 const fadeUp = {
@@ -54,130 +63,146 @@ export default function Landing() {
   return (
     <div className="min-h-screen">
       {/* Hero */}
-      <section className="relative py-16 md:py-28 overflow-hidden">
+      <section className="relative py-16 md:py-24 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary/5 rounded-full blur-3xl" />
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/10 rounded-full blur-3xl" />
         </div>
 
-        <div className="relative max-w-4xl mx-auto text-center">
+        <div className="relative max-w-5xl mx-auto text-center">
           <motion.div {...fadeUp}>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8">
-              <Zap className="w-3.5 h-3.5 text-primary" />
-              <span className="text-xs font-medium text-primary">AI-Powered Smart Insole Platform</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 mb-8">
+              <Sparkles className="w-3.5 h-3.5 text-accent" />
+              <span className="text-xs font-medium text-accent">Solana Frontier Hackathon · Live dApp Demo</span>
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.05] mb-6">
-              AI Smart Insoles for{" "}
-              <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                Basketball Injury Prevention
-              </span>
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95] mb-6">
+              CourtStep AI
             </h1>
 
-            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-              Detect abnormal foot-loading patterns, correct risky movement mechanics, and guide athlete
-              rehabilitation with privacy-preserving on-chain proofs.
+            <p className="text-xl md:text-2xl font-semibold text-foreground max-w-3xl mx-auto mb-4">
+              AI-powered smart insoles for{" "}
+              <span className="bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+                injury prevention, recovery, and performance.
+              </span>
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link to="/dashboard">
-                <Button size="lg" className="h-12 px-8 text-sm font-semibold gap-2">
-                  View Athlete Dashboard <ArrowRight className="w-4 h-4" />
-                </Button>
-              </Link>
-              <Link to="/upload">
-                <Button variant="outline" size="lg" className="h-12 px-8 text-sm font-semibold gap-2">
-                  Upload Gait Data <Footprints className="w-4 h-4" />
-                </Button>
-              </Link>
+            <p className="text-base md:text-lg text-muted-foreground max-w-3xl mx-auto mb-10 leading-relaxed">
+              Pressure sensors and movement AI detect risk before injury happens, while Solana records
+              privacy-preserving proofs of training, recovery, and consent.
+            </p>
+
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              {ctas.map((cta) => (
+                <Link key={cta.label} to={cta.to}>
+                  <Button
+                    size="lg"
+                    variant={cta.primary ? "default" : "outline"}
+                    className="h-11 px-5 text-sm font-semibold gap-2"
+                  >
+                    <cta.icon className="w-4 h-4" />
+                    {cta.label}
+                  </Button>
+                </Link>
+              ))}
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-5xl mx-auto">
-          {features.map((f, i) => (
+      {/* Three feature cards */}
+      <section className="py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-6xl mx-auto">
+          {featureCards.map((f, i) => (
             <motion.div
               key={f.title}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 * i }}
-              className="group bg-card border border-border rounded-2xl p-7 hover:border-primary/30 transition-all duration-300"
+              className={`group bg-card border rounded-2xl p-7 hover:border-primary/30 transition-all duration-300 ${f.border}`}
             >
-              <div className={`w-11 h-11 rounded-xl ${f.bg} flex items-center justify-center mb-5`}>
-                <f.icon className={`w-5 h-5 ${f.color}`} />
+              <div className={`w-12 h-12 rounded-xl ${f.bg} flex items-center justify-center mb-5`}>
+                <f.icon className={`w-6 h-6 ${f.color}`} />
               </div>
-              <h3 className="text-lg font-bold mb-2">{f.title}</h3>
+              <h3 className="text-xl font-bold mb-2">{f.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
         </div>
       </section>
 
-      {/* Visual Card */}
+      {/* Core message */}
       <section className="py-16">
-        <div className="max-w-5xl mx-auto">
-          <div className="relative bg-gradient-to-br from-card via-card to-primary/5 border border-border rounded-2xl p-8 md:p-12 overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl translate-x-1/3 -translate-y-1/3" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-secondary/5 rounded-full blur-3xl -translate-x-1/3 translate-y-1/3" />
+        <div className="max-w-4xl mx-auto bg-gradient-to-br from-card via-card to-primary/5 border border-border rounded-2xl p-8 md:p-12 text-center">
+          <p className="text-base md:text-xl text-foreground leading-relaxed font-medium">
+            CourtStep AI is not just an injury dashboard. It is a{" "}
+            <span className="text-accent">privacy-preserving sports-health data layer</span> where{" "}
+            athletes control access, teams get actionable risk insights, and{" "}
+            <span className="text-primary">Solana verifies consent, provenance, and payments.</span>
+          </p>
+        </div>
+      </section>
 
-            <div className="relative grid md:grid-cols-2 gap-10 items-center">
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold mb-4">How CourtStep AI Works</h2>
-                <div className="space-y-4">
-                  {[
-                    { step: "01", label: "Smart Insole Sensors", desc: "High-density pressure sensors capture real-time foot-loading data during training and games." },
-                    { step: "02", label: "AI Gait Analysis", desc: "Machine learning models analyze gait symmetry, landing impact, and cutting mechanics." },
-                    { step: "03", label: "Risk Detection", desc: "Early biomechanical risk indicators are flagged before injuries develop." },
-                    { step: "04", label: "On-Chain Proofs", desc: "Recovery milestones and consent records are stored as Solana-verified proofs." },
-                  ].map((s) => (
-                    <div key={s.step} className="flex gap-4">
-                      <span className="text-xs font-bold text-primary font-mono mt-1">{s.step}</span>
-                      <div>
-                        <p className="text-sm font-semibold text-foreground">{s.label}</p>
-                        <p className="text-xs text-muted-foreground mt-0.5">{s.desc}</p>
-                      </div>
+      {/* Architecture flow */}
+      <section className="py-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold mb-3">Technical Architecture</h2>
+            <p className="text-sm text-muted-foreground">From foot to Solana, in milliseconds.</p>
+          </div>
+
+          <div className="bg-card border border-border rounded-2xl p-6 md:p-8 overflow-x-auto">
+            <div className="flex items-center justify-between gap-2 min-w-[800px]">
+              {[
+                { label: "Smart Insole", icon: Footprints, color: "primary" },
+                { label: "Sensor Upload", icon: Upload, color: "primary" },
+                { label: "AI Risk Engine", icon: Brain, color: "secondary" },
+                { label: "Encrypted Storage", icon: Lock, color: "secondary" },
+                { label: "Hash + Consent", icon: FileCheck, color: "accent" },
+                { label: "Solana", icon: Shield, color: "accent" },
+                { label: "Team Dashboard", icon: TrendingUp, color: "yellow" },
+              ].map((node, idx, arr) => (
+                <React.Fragment key={node.label}>
+                  <div className="flex flex-col items-center text-center gap-2 flex-1 min-w-[90px]">
+                    <div className={`w-12 h-12 rounded-xl bg-${node.color}/10 border border-${node.color}/20 flex items-center justify-center`}>
+                      <node.icon className={`w-5 h-5 text-${node.color}`} />
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { icon: Footprints, label: "Smart Insoles", val: "256 sensors", color: "primary" },
-                  { icon: Brain, label: "AI Analysis", val: "Real-time", color: "secondary" },
-                  { icon: Activity, label: "Risk Score", val: "72 / 100", color: "destructive" },
-                  { icon: Shield, label: "Solana Proof", val: "Verified", color: "accent" },
-                ].map((c) => (
-                  <div key={c.label} className="bg-background/60 border border-border rounded-xl p-4 text-center">
-                    <c.icon className={`w-6 h-6 mx-auto mb-2 text-${c.color}`} />
-                    <p className="text-xs font-semibold">{c.label}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5 font-mono">{c.val}</p>
+                    <span className="text-[11px] font-semibold leading-tight">{node.label}</span>
                   </div>
-                ))}
-              </div>
+                  {idx < arr.length - 1 && (
+                    <ArrowRight className="w-4 h-4 text-muted-foreground shrink-0" />
+                  )}
+                </React.Fragment>
+              ))}
             </div>
+          </div>
+
+          {/* Stack badges */}
+          <div className="flex flex-wrap justify-center gap-2 mt-8">
+            {stackBadges.map((b) => (
+              <span
+                key={b}
+                className="px-3 py-1.5 rounded-lg bg-muted/40 border border-border text-[11px] font-mono font-medium text-muted-foreground"
+              >
+                {b}
+              </span>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Pitch */}
-      <section className="py-16 text-center">
+      {/* Final CTA */}
+      <section className="py-20 text-center">
         <div className="max-w-3xl mx-auto">
-          <p className="text-base md:text-lg text-muted-foreground leading-relaxed italic">
-            "CourtStep AI combines smart insoles, AI gait analytics, and Solana-based privacy-preserving
-            proofs to help professional basketball teams reduce injury risk, correct movement mechanics,
-            and guide safe return-to-play rehabilitation."
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">See it live.</h2>
+          <p className="text-base text-muted-foreground mb-8">
+            Launch the demo, connect a wallet, and commit your first proof to Solana.
           </p>
-          <div className="mt-8">
-            <Link to="/dashboard">
-              <Button variant="outline" className="gap-2">
-                Explore the Platform <ChevronRight className="w-4 h-4" />
-              </Button>
-            </Link>
-          </div>
+          <Link to="/demo">
+            <Button size="lg" className="h-12 px-8 gap-2 text-sm font-semibold">
+              <Zap className="w-4 h-4" /> Launch Demo <ArrowRight className="w-4 h-4" />
+            </Button>
+          </Link>
         </div>
       </section>
     </div>

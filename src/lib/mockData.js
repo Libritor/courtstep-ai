@@ -130,6 +130,118 @@ export const solanaRecords = [
   { type: "Gait Report Hash", hash: "2Vc6j...w9Kd", timestamp: "2026-05-05 16:08 UTC", wallet: "8xR4...vN7k", consent: "Active", milestone: "—" },
 ];
 
+// Solana / dApp demo data
+export const solanaProofDetails = {
+  walletAddress: "8xR4mN7kP2vQ5tLw9jB3cF6gH1dS0aY4uE8iO7nK",
+  sessionId: "sess_2026-05-10_marcus_johnson_0732",
+  dataHash: "0x7Kf9x4b8c2e1a9d3f6h8j2k4m6n8p0q2r4s6t8v0w2y4a6c8e0g2",
+  modelVersion: "courtstep-risk-v1.4.2",
+  modelHash: "0x3Bn2w5p7r9t1v3x5z7a9c1e3g5i7k9m1o3q5s7u9w1y3a5c7e9",
+  consentScope: "team_medical_staff + treating_physician",
+  timestamp: "2026-05-10T14:32:18Z",
+  txSignature: "5KKRiPxgQ4kNjWtV3rEzCpA9bMfHnSx7Lq2yU8oVwT6mDcF4eX1J",
+  explorerUrl: "https://explorer.solana.com/tx/5KKRiPxgQ4kNjWtV3rEzCpA9bMfHnSx7Lq2yU8oVwT6mDcF4eX1J",
+  blockSlot: 287_445_192,
+  network: "Solana Mainnet (demo)",
+};
+
+export const proofEvents = [
+  { type: "proof_commit", count: 1247, label: "Proof Commits", icon: "shield" },
+  { type: "consent_grant", count: 384, label: "Consent Grants", icon: "key" },
+  { type: "revocation", count: 27, label: "Revoked Permissions", icon: "x" },
+  { type: "session_verified", count: 2891, label: "Sessions Verified", icon: "check" },
+];
+
+export const paymentPlans = [
+  {
+    id: "team",
+    title: "Team Subscription",
+    desc: "Full athlete monitoring for 15-player rosters with team medical dashboard.",
+    price: "1,200",
+    currency: "USDC",
+    period: "month",
+    features: ["All players", "Live risk alerts", "Medical staff seats", "Solana proof archive"],
+    accent: "primary",
+  },
+  {
+    id: "athlete",
+    title: "Athlete Risk Report",
+    desc: "One-time biomechanical risk report with AI recommendations and PDF export.",
+    price: "49",
+    currency: "USDC",
+    period: "report",
+    features: ["48hr gait analysis", "AI recommendations", "On-chain proof", "Shareable report"],
+    accent: "accent",
+  },
+  {
+    id: "rehab",
+    title: "Rehab Monitoring Plan",
+    desc: "Post-surgery rehabilitation program with weekly progress tracking.",
+    price: "299",
+    currency: "USDC",
+    period: "month",
+    features: ["Phase tracking", "Adaptive exercises", "PT collaboration", "Milestone proofs"],
+    accent: "secondary",
+  },
+  {
+    id: "research",
+    title: "Research Data License",
+    desc: "Anonymized aggregate access for sports science research with consent metadata.",
+    price: "5,000",
+    currency: "USDC",
+    period: "year",
+    features: ["Anonymized cohort", "Consent-verified", "Indexed events", "Export API"],
+    accent: "yellow",
+  },
+];
+
+export const riskTrend = Array.from({ length: 12 }, (_, i) => ({
+  week: `W${i + 1}`,
+  marcus: Math.max(40, 85 - i * 1.8 + (Math.sin(i) * 4)),
+  daniel: 55 + Math.sin(i * 0.7) * 6,
+  evan: 42 + Math.cos(i * 0.5) * 5,
+}));
+
+export const teamReadiness = [
+  { player: "Marcus J.", readiness: 64, load: 81 },
+  { player: "Daniel C.", readiness: 78, load: 92 },
+  { player: "Evan B.", readiness: 88, load: 88 },
+  { player: "Tyler R.", readiness: 71, load: 76 },
+  { player: "Jamal S.", readiness: 84, load: 84 },
+  { player: "Andre K.", readiness: 69, load: 88 },
+];
+
+export const recoveryProgress = Array.from({ length: 16 }, (_, i) => ({
+  week: `W${i + 1}`,
+  target: Math.min(100, i * 6.5),
+  actual: Math.min(100, i * 6.0 + Math.sin(i) * 3),
+}));
+
+export const marketStats = [
+  { label: "Sports Analytics Market", value: "$5.2B+", note: "source needed — replace with cited market source" },
+  { label: "Wearable Device Shipments", value: "534M units/yr", note: "source needed — replace with cited market source" },
+  { label: "NBA Player Health Spend", value: "$200M+/season", note: "source needed — replace with cited market source" },
+  { label: "CourtStep AI Overlap", value: "Injury prevention + decision support", note: "Target segment" },
+];
+
+export const hackathonTracks = [
+  { id: "superteam", name: "Superteam Canada", desc: "Canadian team building Solana sports-health infrastructure for professional basketball.", icon: "flag", color: "primary" },
+  { id: "privacy", name: "Privacy Track", desc: "Encrypted offchain medical data with onchain consent proofs and revocation.", icon: "lock", color: "secondary" },
+  { id: "cloak", name: "Cloak Track", desc: "Privacy-preserving real-world payment and data-access flows for athlete care.", icon: "eye-off", color: "accent" },
+  { id: "dune", name: "Dune Analytics", desc: "Public dashboard for anonymized proof events, consent grants, and verifications.", icon: "bar-chart", color: "yellow" },
+  { id: "covalent", name: "GoldRush / Covalent", desc: "Indexed wallet and proof history for team and clinic accounting.", icon: "database", color: "primary" },
+  { id: "infra", name: "QuickNode / Birdeye / Solflare", desc: "Live dApp infrastructure, RPC, and wallet adapter integrations.", icon: "zap", color: "secondary" },
+  { id: "miracle", name: "theMiracle", desc: "In-wallet athlete and team benefit activation, perks, and recovery rewards.", icon: "sparkles", color: "accent" },
+  { id: "sns", name: "SNS Identity", desc: "Athlete and team identity with verified profiles and team-domain handles.", icon: "user-check", color: "yellow" },
+  { id: "stablecoin", name: "Tether / Payments", desc: "Stablecoin (USDC/USDT) access payments for teams, clinics, and trainers.", icon: "credit-card", color: "primary" },
+  { id: "audit", name: "Security Audit Credits", desc: "Audit-ready architecture: clear smart-contract boundary and threat model.", icon: "shield-check", color: "secondary" },
+];
+
+export const stackBadges = [
+  "Solana", "Wallet Adapter", "USDC", "SHA-256", "AES-256-GCM",
+  "Offchain Storage", "AI Risk Model", "Dune-ready Events", "Covalent / GoldRush", "SNS Identity",
+];
+
 export const footPressureZones = {
   left: {
     bigToe: { pressure: 38, status: "normal" },

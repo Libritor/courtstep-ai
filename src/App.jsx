@@ -7,11 +7,17 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Layout from './components/Layout';
 import Landing from './pages/Landing';
+import LiveDemo from './pages/LiveDemo';
 import Dashboard from './pages/Dashboard';
 import GaitAnalysis from './pages/GaitAnalysis';
 import RiskReport from './pages/RiskReport';
+import Recommendations from './pages/Recommendations';
 import Rehabilitation from './pages/Rehabilitation';
 import SolanaProofs from './pages/SolanaProofs';
+import Privacy from './pages/Privacy';
+import Payments from './pages/Payments';
+import Analytics from './pages/Analytics';
+import HackathonFit from './pages/HackathonFit';
 import UploadData from './pages/UploadData';
 
 const AuthenticatedApp = () => {
@@ -42,11 +48,17 @@ const AuthenticatedApp = () => {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Landing />} />
+        <Route path="/demo" element={<LiveDemo />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/gait-analysis" element={<GaitAnalysis />} />
         <Route path="/risk-report" element={<RiskReport />} />
+        <Route path="/recommendations" element={<Recommendations />} />
         <Route path="/rehabilitation" element={<Rehabilitation />} />
         <Route path="/solana-proofs" element={<SolanaProofs />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/payments" element={<Payments />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/hackathon-fit" element={<HackathonFit />} />
         <Route path="/upload" element={<UploadData />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
