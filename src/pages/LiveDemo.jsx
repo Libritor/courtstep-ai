@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { athletes, solanaProofDetails } from "@/lib/mockData";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { connectSolanaWallet, encryptProofPayload, hashUploadedFile, signProofMessage } from "@/lib/proofUtils";
 import {
   Wallet,
   Upload,
@@ -30,34 +31,55 @@ const steps = [
 export default function LiveDemo() {
   const [activeStep, setActiveStep] = useState(0);
   const [walletConnected, setWalletConnected] = useState(false);
+  const [walletAddress, setWalletAddress] = useState(solanaProofDetails.walletAddress);
+  const [walletProvider, setWalletProvider] = useState(null);
+  const [isRealWallet, setIsRealWallet] = useState(false);
   const [selectedAthlete, setSelectedAthlete] = useState(athletes[0]);
   const [uploaded, setUploaded] = useState(false);
+  const [uploadedFileName, setUploadedFileName] = useState("gait_session_20260510.csv");
+  const [fileHash, setFileHash] = useState(solanaProofDetails.dataHash);
   const [riskScore, setRiskScore] = useState(null);
   const [encrypted, setEncrypted] = useState(false);
+  const [encryptionInfo, setEncryptionInfo] = useState(null);
   const [committed, setCommitted] = useState(false);
+  const [proofSignature, setProofSignature] = useState(solanaProofDetails.txSignature);
   const [processing, setProcessing] = useState(null);
+  const fileInputRef = useRef(null);
   const { toast } = useToast();
 
   const advance = (id) => setActiveStep(steps.findIndex((s) => s.id === id) + 1);
 
-  const handleConnect = () => {
+  const handleConnect = async () => {
     setProcessing("wallet");
-    setTimeout(() => {
-      setWalletConnected(true);
-      setProcessing(null);
-      advance("wallet");
-      toast({ title: "Wallet Connected", description: "Phantom · 8xR4...vN7k" });
-    }, 1200);
+    const connection = await connectSolanaWallet();
+    setWalletAddress(connection.address);
+    setWalletProvider(connection.provider);
+    setIsRealWallet(connection.isRealWallet);
+    setWalletConnected(true);
+    setProcessing(null);
+    advance("wallet");
+    toast({
+      title: connection.isRealWallet ? "Wallet Connected" : "Demo Wallet Loaded",
+      description: connection.isRealWallet
+        ? `${connection.address.slice(0, 4)}...${connection.address.slice(-4)}`
+        : "Install Phantom or Solflare for real wallet signing.",
+    });
   };
 
-  const handleUpload = () => {
+  const handleUpload = async (file) => {
     setProcessing("upload");
-    setTimeout(() => {
-      setUploaded(true);
-      setProcessing(null);
-      advance("upload");
-      toast({ title: "Sensor file uploaded", description: "gait_session_20260510.csv · 2,400 rows" });
-    }, 1500);
+    const sensorFile = file || new File(
+      ["time,leftPressure,rightPressure,impact\n0,42,51,4.2\n1,44,53,4.1\n2,46,55,4.4"],
+      "sample_gait_session.csv",
+      { type: "text/csv" }
+    );
+    const hash = await hashUploadedFile(sensorFile);
+    setUploadedFileName(sensorFile.name);
+    setFileHash(hash);
+    setUploaded(true);
+    setProcessing(null);
+    advance("upload");
+    toast({ title: "Sensor file uploaded", description: `${sensorFile.name} · SHA-256 hash generated` });
   };
 
   const handleRisk = () => {
@@ -70,24 +92,34 @@ export default function LiveDemo() {
     }, 2000);
   };
 
-  const handleEncrypt = () => {
+  const handleEncrypt = async () => {
     setProcessing("encrypt");
-    setTimeout(() => {
-      setEncrypted(true);
-      setProcessing(null);
-      advance("encrypt");
-      toast({ title: "Encrypted health data stored offchain", description: "AES-256-GCM · IPFS-pinned" });
-    }, 1500);
+    const encryptedPayload = await encryptProofPayload({
+      athleteId: selectedAthlete.id,
+      athleteName: selectedAthlete.name,
+      fileHash,
+      riskScore,
+      timestamp: new Date().toISOString(),
+    });
+    setEncryptionInfo(encryptedPayload);
+    setEncrypted(true);
+    setProcessing(null);
+    advance("encrypt");
+    toast({ title: "Encrypted health data prepared", description: `${encryptedPayload.algorithm} · ${encryptedPayload.encryptedBytes} bytes` });
   };
 
-  const handleCommit = () => {
+  const handleCommit = async () => {
     setProcessing("commit");
-    setTimeout(() => {
-      setCommitted(true);
-      setProcessing(null);
-      advance("commit");
-      toast({ title: "SHA-256 proof committed", description: "Solana tx confirmed" });
-    }, 2200);
+    const message = `CourtStep AI Proof\nWallet: ${walletAddress}\nAthlete: ${selectedAthlete.name}\nData Hash: ${fileHash}\nRisk Score: ${riskScore}\nConsent: ${solanaProofDetails.consentScope}`;
+    const signature = await signProofMessage(walletProvider, message);
+    setProofSignature(signature || solanaProofDetails.txSignature);
+    setCommitted(true);
+    setProcessing(null);
+    advance("commit");
+    toast({
+      title: signature ? "Proof Signed by Wallet" : "Demo Proof Generated",
+      description: signature ? "Wallet signature captured for verification." : "Connect a real wallet to sign the proof.",
+    });
   };
 
   const copy = (text) => {
@@ -173,7 +205,7 @@ export default function LiveDemo() {
             <div className="flex items-center justify-between gap-3 p-3 rounded-lg bg-muted/30">
               <div>
                 <p className="text-[10px] text-muted-foreground uppercase">Connected</p>
-                <p className="text-sm font-mono">{solanaProofDetails.walletAddress.slice(0, 8)}...{solanaProofDetails.walletAddress.slice(-6)}</p>
+                <p className="text-sm font-mono">{walletAddress.slice(0, 8)}...{walletAddress.slice(-6)}</p>
               </div>
               <CheckCircle2 className="w-5 h-5 text-accent" />
             </div>
@@ -204,12 +236,26 @@ export default function LiveDemo() {
           disabled={!walletConnected}
         >
           {!uploaded ? (
-            <Button onClick={handleUpload} disabled={processing === "upload" || !walletConnected} className="gap-2">
-              {processing === "upload" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
-              Upload gait_session.csv
-            </Button>
+            <>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept=".csv,.json,.txt"
+                className="hidden"
+                onChange={(event) => event.target.files?.[0] && handleUpload(event.target.files[0])}
+              />
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={() => fileInputRef.current?.click()} disabled={processing === "upload" || !walletConnected} className="gap-2">
+                  {processing === "upload" ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                  Choose Sensor File
+                </Button>
+                <Button variant="outline" onClick={() => handleUpload()} disabled={processing === "upload" || !walletConnected} className="gap-2">
+                  Use Sample CSV
+                </Button>
+              </div>
+            </>
           ) : (
-            <StatusLine label="gait_session_20260510.csv" detail="2,400 rows · 30 min · ready" />
+            <StatusLine label={uploadedFileName} detail={`${fileHash.slice(0, 18)}... · ready`} />
           )}
         </ActionPanel>
 
@@ -255,7 +301,7 @@ export default function LiveDemo() {
               Encrypt & Store
             </Button>
           ) : (
-            <StatusLine label="Encrypted health data stored offchain" detail="AES-256-GCM · IPFS-pinned" />
+            <StatusLine label="Encrypted health data prepared" detail={`${encryptionInfo?.algorithm} · ${encryptionInfo?.encryptedBytes} bytes · IV ${encryptionInfo?.ivHex.slice(0, 8)}...`} />
           )}
         </ActionPanel>
 
@@ -275,7 +321,10 @@ export default function LiveDemo() {
               Commit Proof
             </Button>
           ) : (
-            <StatusLine label="SHA-256 proof committed · Consent scope active · Revocation available" detail="Tx confirmed in 1 slot" />
+            <StatusLine
+              label={isRealWallet ? "Proof signed · Consent scope active · Revocation available" : "Demo proof generated · Connect wallet for real signing"}
+              detail={isRealWallet ? "Wallet signature captured" : "Demo mode — no wallet extension detected"}
+            />
           )}
         </ActionPanel>
       </div>
@@ -289,10 +338,11 @@ export default function LiveDemo() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <ProofRow label="Session ID" value={solanaProofDetails.sessionId} mono />
-            <ProofRow label="Data Hash" value={solanaProofDetails.dataHash} mono copy onCopy={copy} />
+            <ProofRow label="Data Hash" value={fileHash} mono copy onCopy={copy} />
+            <ProofRow label="Encryption" value={`${encryptionInfo?.algorithm} · ${encryptionInfo?.encryptedBytes} bytes`} mono />
             <ProofRow label="Model Version Hash" value={solanaProofDetails.modelHash} mono copy onCopy={copy} />
             <ProofRow label="Consent Scope" value={solanaProofDetails.consentScope} />
-            <ProofRow label="Tx Signature" value={solanaProofDetails.txSignature} mono copy onCopy={copy} />
+            <ProofRow label={isRealWallet ? "Wallet Signature" : "Demo Signature"} value={proofSignature} mono copy onCopy={copy} />
             <ProofRow label="Block Slot" value={solanaProofDetails.blockSlot.toLocaleString()} mono />
           </div>
           <div className="mt-5 flex flex-wrap gap-3">

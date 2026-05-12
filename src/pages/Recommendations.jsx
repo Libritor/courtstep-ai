@@ -5,7 +5,7 @@ import RecommendationCard from "@/components/risk/RecommendationCard";
 
 const summary = [
   { icon: TrendingDown, label: "Reduce Landing Load", value: "-12%", desc: "Recommended over next 48h", color: "destructive" },
-  { icon: AlertTriangle, label: "Flag Asymmetry", value: "6%", desc: "Above 5% threshold", color: "yellow" },
+  { icon: AlertTriangle, label: "Flag Asymmetry", value: "6%", desc: "Above 5% threshold", color: "yellow-400" },
   { icon: RotateCcw, label: "Recovery Session", value: "Today", desc: "Active recovery suggested", color: "accent" },
   { icon: UserCheck, label: "Trainer Review", value: "Required", desc: "Schedule check-in", color: "secondary" },
   { icon: Trophy, label: "Return-to-Play Score", value: "64 / 100", desc: "Phase 3 of 4", color: "primary" },

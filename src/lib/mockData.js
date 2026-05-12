@@ -191,7 +191,7 @@ export const paymentPlans = [
     currency: "USDC",
     period: "year",
     features: ["Anonymized cohort", "Consent-verified", "Indexed events", "Export API"],
-    accent: "yellow",
+    accent: "yellow-400",
   },
 ];
 
@@ -228,11 +228,11 @@ export const hackathonTracks = [
   { id: "superteam", name: "Superteam Canada", desc: "Canadian team building Solana sports-health infrastructure for professional basketball.", icon: "flag", color: "primary" },
   { id: "privacy", name: "Privacy Track", desc: "Encrypted offchain medical data with onchain consent proofs and revocation.", icon: "lock", color: "secondary" },
   { id: "cloak", name: "Cloak Track", desc: "Privacy-preserving real-world payment and data-access flows for athlete care.", icon: "eye-off", color: "accent" },
-  { id: "dune", name: "Dune Analytics", desc: "Public dashboard for anonymized proof events, consent grants, and verifications.", icon: "bar-chart", color: "yellow" },
+  { id: "dune", name: "Dune Analytics", desc: "Public dashboard for anonymized proof events, consent grants, and verifications.", icon: "bar-chart", color: "yellow-400" },
   { id: "covalent", name: "GoldRush / Covalent", desc: "Indexed wallet and proof history for team and clinic accounting.", icon: "database", color: "primary" },
   { id: "infra", name: "QuickNode / Birdeye / Solflare", desc: "Live dApp infrastructure, RPC, and wallet adapter integrations.", icon: "zap", color: "secondary" },
   { id: "miracle", name: "theMiracle", desc: "In-wallet athlete and team benefit activation, perks, and recovery rewards.", icon: "sparkles", color: "accent" },
-  { id: "sns", name: "SNS Identity", desc: "Athlete and team identity with verified profiles and team-domain handles.", icon: "user-check", color: "yellow" },
+  { id: "sns", name: "SNS Identity", desc: "Athlete and team identity with verified profiles and team-domain handles.", icon: "user-check", color: "yellow-400" },
   { id: "stablecoin", name: "Tether / Payments", desc: "Stablecoin (USDC/USDT) access payments for teams, clinics, and trainers.", icon: "credit-card", color: "primary" },
   { id: "audit", name: "Security Audit Credits", desc: "Audit-ready architecture: clear smart-contract boundary and threat model.", icon: "shield-check", color: "secondary" },
 ];
