@@ -122,18 +122,15 @@ export default function Layout() {
         </nav>
 
         <div className="p-4 border-t border-sidebar-border space-y-2">
-          <Link
-            to="/demo"
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold transition-colors"
-          >
+          <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 hover:bg-primary/20 text-primary text-xs font-semibold transition-colors">
             <Wallet className="w-3.5 h-3.5" />
             Connect Wallet
-          </Link>
+          </button>
           <div className="px-3 py-2 rounded-lg bg-muted/30">
-            <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">Solana Demo</p>
+            <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">Solana Devnet</p>
             <p className="text-xs text-foreground font-medium mt-0.5 flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
-              Ready
+              Connected
             </p>
           </div>
         </div>

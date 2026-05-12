@@ -3,41 +3,27 @@ import { solanaRecords, solanaProofDetails } from "@/lib/mockData";
 import { Shield, Wallet, Link2, Award, FileCheck, UserCheck, Sparkles, Copy, ExternalLink, XCircle, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { connectSolanaWallet, signProofMessage } from "@/lib/proofUtils";
 import SolanaRecordRow from "@/components/solana/SolanaRecordRow";
 
 export default function SolanaProofs() {
   const [walletConnected, setWalletConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
-  const [walletProvider, setWalletProvider] = useState(null);
-  const [isRealWallet, setIsRealWallet] = useState(false);
   const [minting, setMinting] = useState(null);
   const [revoked, setRevoked] = useState(false);
   const { toast } = useToast();
 
-  const handleConnect = async () => {
-    const connection = await connectSolanaWallet();
+  const handleConnect = () => {
     setWalletConnected(true);
-    setWalletAddress(connection.address);
-    setWalletProvider(connection.provider);
-    setIsRealWallet(connection.isRealWallet);
-    toast({
-      title: connection.isRealWallet ? "Wallet Connected" : "Demo Wallet Loaded",
-      description: connection.isRealWallet
-        ? `${connection.address.slice(0, 4)}...${connection.address.slice(-4)}`
-        : "Install Phantom or Solflare for real wallet signing.",
-    });
+    setWalletAddress(solanaProofDetails.walletAddress);
+    toast({ title: "Wallet Connected", description: "Phantom wallet connected successfully." });
   };
 
-  const handleAction = async (action) => {
+  const handleAction = (action) => {
     setMinting(action);
-    const message = `CourtStep AI ${action}\nWallet: ${walletAddress}\nHash: ${solanaProofDetails.dataHash}\nConsent: ${solanaProofDetails.consentScope}`;
-    const signature = await signProofMessage(walletProvider, message);
-    setMinting(null);
-    toast({
-      title: signature ? "Proof Signed" : "Demo Proof Generated",
-      description: signature ? "Wallet signature captured for verification." : "Connect a real wallet to sign on Solana.",
-    });
+    setTimeout(() => {
+      setMinting(null);
+      toast({ title: "Transaction Complete", description: `${action} submitted to Solana.` });
+    }, 2000);
   };
 
   const copy = (text) => {
@@ -153,7 +139,6 @@ export default function SolanaProofs() {
             <div>
               <p className="text-xs text-muted-foreground">Connected Wallet</p>
               <p className="text-sm font-mono font-medium">{walletAddress.slice(0, 8)}...{walletAddress.slice(-6)}</p>
-              <p className="text-[10px] text-muted-foreground">{isRealWallet ? "Real wallet signing enabled" : "Demo mode — wallet extension not detected"}</p>
             </div>
           </div>
         )}

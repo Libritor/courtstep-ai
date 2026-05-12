@@ -102,7 +102,7 @@ export default function HackathonFit() {
               { label: "Encrypted Storage", icon: Lock, color: "secondary" },
               { label: "Hash + Consent", icon: FileCheck, color: "accent" },
               { label: "Solana", icon: Shield, color: "accent" },
-              { label: "Team Dashboard", icon: TrendingUp, color: "yellow-400" },
+              { label: "Team Dashboard", icon: TrendingUp, color: "yellow" },
             ].map((node, idx, arr) => (
               <React.Fragment key={node.label}>
                 <div className="flex flex-col items-center text-center gap-2 flex-1 min-w-[90px]">
